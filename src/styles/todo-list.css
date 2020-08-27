@@ -5,6 +5,10 @@
 button{
   width: 200px;
 }
+
+.completed {
+  background-color: limegreen;
+}
 #incomplete{
   background-color: yellow;
   color: black;
