@@ -23,6 +23,7 @@ const TodoList = () => {
       setUserInfo( dataJson );
       const data1 = await fetch( 'https://jsonplaceholder.typicode.com/users/' + num + '/todos' );
       const dataJson1 = await data1.json();
+      console.log(`dataJson1`, JSON.stringify(dataJson1, null, 4));
       setTaskInfo( dataJson1 );
     };
     getData();
@@ -60,17 +61,16 @@ const TodoList = () => {
 
   const handleDeleteTask = ( index ) => {
     setTaskInfo( ( prevState ) => {
-      return prevState.filter( ( taskInfo, i ) => i !== index );
+      return prevState.filter( ( _, i ) => i !== index );
     } );
   };
 
   const handleCompleteTask = ( index ) => {
-    setCompleted( ( prevState ) => [
-      ...prevState,
-      todos[ index ]
-    ] );
 
-    handleDeleteTask( index );
+    const taskInfoUpdated = [ ...taskInfo ];
+    taskInfoUpdated[index].completed = true;
+
+    setTaskInfo( taskInfoUpdated );
   };
 
 
@@ -134,27 +134,14 @@ const TodoList = () => {
                         <td>
                           {
                             taskInfo.completed
-                                ? <button id="complete" className={
-                                  darkMode
-                                      ?''
-                                      :'dark-mode'} onClick={ () => setDarkMode( (prevDarkMode ) => !prevDarkMode )}>
-                                  {
-                                    taskInfo.completed
-                                        ? ' Completada'
-                                        : ' Marcar como completada'
-                                  }
-                                </button>
-                                : <button id="incomplete" >
-                                  {
-                                    taskInfo.completed
-                                        ? ' Completada'
-                                        : ' Marcar como completada'
-                                  }
-                                </button>
+                                ? <button className='completed'>Completada</button>
+                                : <button className="incomplete" onClick={()=>handleCompleteTask(index)}>
+                                  Marcar como completada
+                                  </button>
                           }
                         </td>
                         <td>
-                          <button id="delete" onClick={ () => handleDeleteTask( index ) }>Eliminar</button>
+                          <button onClick={ () => handleDeleteTask( index ) }>Eliminar</button>
                         </td>
                       </tr>
                     )
